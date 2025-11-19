@@ -4,9 +4,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from sklearn.datasets import load_iris
 
-# ----------------------------------
-# Streamlit Page Config
-# ----------------------------------
+
 st.set_page_config(
     page_title="Iris Data Explorer",
     page_icon="🌸",
@@ -15,14 +13,10 @@ st.set_page_config(
 
 st.title("🌸 Iris Dataset Interactive Visualization App")
 
-# ----------------------------------
-# Load Iris Dataset
-# ----------------------------------
 iris = load_iris()
 df = pd.DataFrame(iris.data, columns=iris.feature_names)
-df["species"] = iris.target  # numeric 0,1,2
+df["species"] = iris.target  
 
-# Convert 0/1/2 → species names
 df["species"] = df["species"].map({
     0: "setosa",
     1: "versicolor",
@@ -37,26 +31,20 @@ species_colors = {
 
 st.success("Iris dataset loaded successfully!")
 
-# ----------------------------------
-# Sidebar Filters
-# ----------------------------------
+
 st.sidebar.header("Filter Options")
 
 numeric_cols = df.select_dtypes(include="number").columns.tolist()
 
-# Histogram column selector
 selected_hist_col = st.sidebar.selectbox(
     "Select column for histogram:",
-    numeric_cols + ["species"]   # allow species in histogram
+    numeric_cols + ["species"]   
 )
 
-# Scatter plot selectors
 x_axis = st.sidebar.selectbox("Scatter plot X-axis:", numeric_cols)
 y_axis = st.sidebar.selectbox("Scatter plot Y-axis:", numeric_cols)
 
-# ----------------------------------
-# Data Summary Section
-# ----------------------------------
+
 st.subheader("📌 Dataset Preview")
 st.dataframe(df.head())
 
@@ -67,9 +55,6 @@ col1.metric("Rows", len(df))
 col2.metric("Columns", len(df.columns))
 col3.metric("Unique Species", df["species"].nunique())
 
-# ----------------------------------
-# Visualizations
-# ----------------------------------
 st.header("📊 Visualizations")
 
 st.subheader(f"Histogram of {selected_hist_col}")
@@ -88,7 +73,7 @@ else:
 
 st.pyplot(fig1)
 
-# ----- Scatter Plot -----
+
 st.subheader(f"Scatter Plot: {x_axis} vs {y_axis}")
 
 fig2, ax2 = plt.subplots(figsize = (8,4))
